@@ -1,5 +1,7 @@
+require_relative './insertion_sort'
 require 'minitest'
-require './insertion_sort'
+require 'minitest/autorun'
+require 'minitest/pride'
 
 class InsertionTest < Minitest::Test
   def test_sorts_an_array

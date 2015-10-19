@@ -1,5 +1,8 @@
+require_relative './bubble_sort'
 require 'minitest'
-require './bubble_sort'
+require 'minitest/autorun'
+require 'minitest/pride'
+
 
 class BubbleTest < Minitest::Test
   def test_sorts_an_array
