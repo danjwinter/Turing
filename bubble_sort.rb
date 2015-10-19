@@ -13,7 +13,3 @@ class BubbleSort
     elements
   end
 end
-
-
-sorter = BubbleSort.new
-puts sorter.sort([5, 2, 7, 8])

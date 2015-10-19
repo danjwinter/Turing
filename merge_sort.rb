@@ -1,5 +1,7 @@
-require 'benchmark'
 class MergeSort
+  def initialize
+  end
+
   def sort(arr)
     new_arr = []
     if arr.length >= 3
@@ -37,13 +39,3 @@ class MergeSort
     new_arr
   end
 end
-
-
-
-sorter = MergeSort.new
-puts sorter.sort(["d", "b", "a", "c"])
-
-stupid_arr = Array(1..100)
-
-time = Benchmark.realtime {MergeSort.new.sort(stupid_arr)}
-puts "Time elapsed #{time * 1000} milliseconds"

@@ -1,5 +1,4 @@
 class InsertionSort
-
 	def sort(list)
 		list.each_with_index do |num, index|
       counter = 1
@@ -23,6 +22,3 @@ class InsertionSort
     end
   end
 end
-
-sorter = InsertionSort.new
-puts sorter.sort(["d", "b", "a", "c"])
