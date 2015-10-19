@@ -34,7 +34,7 @@ class MergeTest < Minitest::Test
 
   def test_it_sorts_strings
     sorter = MergeSort.new
-    assert_equal ['a', 'b', 'd', 'f', 'e', 'c'], sorter.sort(['a', 'b', 'c', 'd', 'e', 'f'])
+    assert_equal ['a', 'b', 'c', 'd', 'e', 'f'], sorter.sort(['a', 'b', 'd', 'f', 'e', 'c'])
   end
 
   def test_it_sorts_one_thousand_elements
