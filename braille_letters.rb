@@ -1,18 +1,19 @@
 require 'pry'
 class FileReader
   def read
+    #binding.pry
     filename = ARGV[0]
-    File.read(filename)
+    NightWriter.new(File.read(filename))
   end
 end
 
 class NightWriter
   attr_reader :reader, :string
 
-  def initialize
+  def initialize(reader)
     @reader = FileReader.new
-    @string = reader.read
-    binding.pry
+    @string = reader
+    # binding.pry
   end
 
   ALPHABET_TO_BRAILLE = {
@@ -46,6 +47,8 @@ class NightWriter
 
   BRAILLE_TO_ALPHABET = ALPHABET_TO_BRAILLE.invert
 
+
+
   # def grab_last_chars
   #   if @string.length < 40
   #     return @string
@@ -59,16 +62,13 @@ class NightWriter
   #   end
   # end
   #
-  # def chunk_from_alphabet
-  #   chunked_string = []
-  #   chunked_string << @string.scan(/.{40}/)
-  #   chunked_string
-  # end
+  def chunk_from_alphabet
+    @string.delete_if("\n")
+    @string.chars.each_slice(40).map(&:join)
+  end
   #
   # def chunk_from_braille
-  #   chunked_string = []
-  #   chunked_string << @string.scan(/.{160}/)
-  #   chunked_string
+  #   tr.chars.each_slice(160).map(&:join)
   # end
   #
   # def convert_to_braille
@@ -89,8 +89,4 @@ class NightWriter
   #   end
   # end
 end
-
-puts ARGV.inspect
-
-night = NightWriter.new("sample.txt")
-night.reader.read
+FileReader.new.read
