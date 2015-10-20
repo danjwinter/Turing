@@ -1,7 +1,6 @@
 require 'pry'
 class FileReader
   def read
-    #binding.pry
     filename = ARGV[0]
     NightWriter.new(File.read(filename))
   end
@@ -13,7 +12,7 @@ class NightWriter
   def initialize(reader)
     @reader = FileReader.new
     @string = reader
-     binding.pry
+  #   binding.pry
   end
 
   ALPHABET_TO_BRAILLE = {
@@ -42,7 +41,8 @@ class NightWriter
     "w" => [".0", "00", ".0"],
     "x" => ["00", "..", "00"],
     "y" => ["00", ".0", "00"],
-    "z" => ["0.", ".0", "00"]
+    "z" => ["0.", ".0", "00"],
+    " " => ["..", "..", ".."]
   }
 
   BRAILLE_TO_ALPHABET = ALPHABET_TO_BRAILLE.invert
@@ -63,7 +63,7 @@ class NightWriter
   # end
   #
   def chunk_from_alphabet
-    @string.delete "\n"
+    @string.delete "\n" "." "," "-" "\'"
     @string.chars.each_slice(40).map(&:join)
   end
   #
