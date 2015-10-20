@@ -13,7 +13,7 @@ class NightWriter
   def initialize(reader)
     @reader = FileReader.new
     @string = reader
-    # binding.pry
+     binding.pry
   end
 
   ALPHABET_TO_BRAILLE = {
@@ -63,7 +63,7 @@ class NightWriter
   # end
   #
   def chunk_from_alphabet
-    @string.delete_if("\n")
+    @string.delete "\n"
     @string.chars.each_slice(40).map(&:join)
   end
   #
@@ -90,3 +90,4 @@ class NightWriter
   # end
 end
 FileReader.new.read
+puts ARGV
