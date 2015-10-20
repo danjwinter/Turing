@@ -76,7 +76,6 @@ module SortingSuite
        end
      end
 
-     binding.pry
    end
  end
 

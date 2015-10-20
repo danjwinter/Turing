@@ -4,7 +4,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 
 class MergeTest < Minitest::Test
-  def test_sorts_an_array
+  def test_sorts_an_empty_array
     sorter = MergeSort.new
     assert_equal [], sorter.sort([])
   end

@@ -4,7 +4,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 
 class InsertionTest < Minitest::Test
-  def test_sorts_an_array
+  def test_sorts_an_empty_array
     sorter = InsertionSort.new
     assert_equal [], sorter.sort([])
   end

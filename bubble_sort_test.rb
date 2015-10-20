@@ -5,7 +5,7 @@ require 'minitest/pride'
 
 
 class BubbleTest < Minitest::Test
-  def test_sorts_an_array
+  def test_sorts_an_empty_array
     sorter = BubbleSort.new
     assert_equal [], sorter.sort([])
   end

@@ -7,6 +7,7 @@ class MergeSort
     if arr.length >= 3
       mid_point_left = (arr.length / 2).floor - 1
       left = sort(arr[0..mid_point_left])
+
       mid_point_right = (arr.length / 2)
       right = sort(arr[mid_point_right..-1])
     elsif arr.length == 2
