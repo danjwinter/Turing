@@ -91,8 +91,18 @@ class NightWriterTest < Minitest::Test
     night = NightWriter.new
     string_num_ready = night.add_number_trigger("91 pizzas")
     night.determine_digit_or_non_to_covert(string_num_ready)
-    assert_equal ".0.00...00.00.0.0..0..", night.top
-    assert_equal ".00.....0.0..0.0..0...", night.middle
-    assert_equal "00......0...0000..0...", night.bottom
+    assert_equal ".0.00...00.00.0.0..0", night.top
+    assert_equal ".00.....0.0..0.0..0.", night.middle
+    assert_equal "00......0...0000..0.", night.bottom
+  end
+
+  def test_it_converts_numbers_letters_and_capitals
+    night = NightWriter.new
+    num_ready = night.add_number_trigger("The 91 pizzas")
+    num_and_cap_ready = night.add_shift_for_capital_character(num_ready)
+    night.determine_digit_or_non_to_covert(num_and_cap_ready)
+    assert_equal "...00.0....0.00...00.00.0.0..0", night.top
+    assert_equal "..0000.0...00.....0.0..0.0..0.", night.middle
+    assert_equal ".00.......00......0...0000..0.", night.bottom
   end
 end

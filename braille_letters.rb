@@ -63,6 +63,8 @@ module Dictionary
     "9" => [".0", "0.", ".."],
     " " => ["..", "..", ".."]
   }
+
+  BRAILLE_TO_NUMBER = NUMBER_TO_BRAILLE.invert
 end
 
 module FileWriter
@@ -148,7 +150,13 @@ class NightWriter
     string.delete "\n"
     array_string = string.split(" ")
     array_string.each do |word|
-      if word[0] == "#"
+      if word == array_string[-1]
+        if word[0] == "#"
+          convert_digit_to_braille(word)
+        else
+          convert_non_digit_to_braille(word)
+        end
+      elsif word[0] == "#"
         convert_digit_to_braille(word + " ")
       else
         convert_non_digit_to_braille(word + " ")
