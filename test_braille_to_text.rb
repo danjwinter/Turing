@@ -39,4 +39,24 @@ class NightReaderTest < Minitest::Test
     night.bottom = ["mo", "in"]
     assert_equal [["Th", "e ", "mo"], ["ne", "y ", "in"]], night.create_braille_key
   end
+
+  def test_it_creates_letter_string
+    night = NightReader.new
+    letter_string = night.create_letter_string([[".0", "00", "0."], ["0.", "00", ".."], ["0.", ".0", ".."], ["0.", "00", "0."], ["0.", ".0", ".."]])
+    assert_equal "there", letter_string
+  end
+
+  def test_it_converts_to_numbers_from_trigger
+    night = NightReader.new
+    num = night.convert_to_numbers_from_trigger("#abcdef")
+    assert_equal "123456", num
+  end
+
+  def test_it_rescans_and_converts_words
+    night = NightReader.new
+    formatted_string = night.rescan_for_numbers("The #ejj bananas, #bjj dollars")
+    assert_equal "The 500 bananas, 200 dollars", formatted_string
+  end
+
+
 end

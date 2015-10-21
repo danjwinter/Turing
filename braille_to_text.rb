@@ -45,9 +45,36 @@ class NightReader
     end
     braille_keys
   end
-  # 
-  # def
-  # end
+
+  def create_letter_string(braille_keys)
+    letter_string = ""
+    braille_keys.each do |key|
+      letter_string << BRAILLE_TO_ALPHABET[key]
+    end
+    letter_string
+  end
+
+  def convert_to_numbers_from_trigger(string)
+    string.delete!("#")
+    num = ""
+    string.each_char do |char|
+      num << LETTERS_TO_NUMBERS[char]
+    end
+    num
+  end
+
+  def rescan_for_numbers(string)
+    numbered_string = ""
+    segmented_words = string.split
+    segmented_words.each do |word|
+      if word[0] == "#"
+        numbered_string << convert_to_numbers_from_trigger(word) + " "
+      else
+        numbered_string << word + " "
+      end
+    end
+    numbered_string[0..-2]
+  end
 end
 
 
