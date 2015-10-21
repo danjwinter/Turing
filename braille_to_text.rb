@@ -31,6 +31,11 @@ class NightReader
       @bottom << array.shift
     end
   end
+
+  def slice_string_into_twos(string)
+    sliced_string = string.scan(/.{2}/)
+    sliced_string
+  end
 end
 
 

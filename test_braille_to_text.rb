@@ -25,4 +25,10 @@ class NightReaderTest < Minitest::Test
     assert_equal "is alwaysstand", night.middle
     assert_equal "money right", night.bottom
   end
+
+  def test_it_can_slice_string_into_twos
+    night = NightReader.new
+    sliced_string_of_twos = night.slice_string_into_twos("The money in")
+    assert_equal ["Th", "e ", "mo", "ne", "y ", "in"], sliced_string_of_twos
+  end
 end
