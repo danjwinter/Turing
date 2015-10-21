@@ -31,4 +31,12 @@ class NightReaderTest < Minitest::Test
     sliced_string_of_twos = night.slice_string_into_twos("The money in")
     assert_equal ["Th", "e ", "mo", "ne", "y ", "in"], sliced_string_of_twos
   end
+
+  def test_it_can_sort_top_middle_bottom
+    night = NightReader.new
+    night.top = ["Th", "ne",]
+    night.middle = ["e ", "y "]
+    night.bottom = ["mo", "in"]
+    assert_equal [["Th", "e ", "mo"], ["ne", "y ", "in"]], night.create_braille_key
+  end
 end

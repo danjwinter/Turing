@@ -11,7 +11,8 @@ end
 
 class NightReader
   include Dictionary
-  attr_reader :reader, :string, :top, :middle, :bottom
+  attr_reader :reader, :string, :top, :middle, :bottom, :braille_key
+  attr_writer :top, :bottom, :middle
 
   def initialize
     @reader = FileReader.new
@@ -36,6 +37,17 @@ class NightReader
     sliced_string = string.scan(/.{2}/)
     sliced_string
   end
+
+  def create_braille_key
+    braille_keys = []
+    @top.each_index do |i|
+      braille_keys[i] = [top[i], middle[i], bottom[i]]
+    end
+    braille_keys
+  end
+  # 
+  # def
+  # end
 end
 
 
