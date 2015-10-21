@@ -1,20 +1,14 @@
+#!/usr/bin/env ruby
+
 require 'pry'
 class FileReader
   def read
     filename = ARGV[0]
-    NightWriter.new(File.read(filename))
+    (File.read(filename))
   end
 end
 
-class NightWriter
-  attr_reader :reader, :string
-
-  def initialize(reader)
-    @reader = FileReader.new
-    @string = reader
-  #   binding.pry
-  end
-
+module Dictionary
   ALPHABET_TO_BRAILLE = {
     "a" => ["0.", "..", ".."],
     "b" => ["0.", "0.", ".."],
@@ -42,52 +36,140 @@ class NightWriter
     "x" => ["00", "..", "00"],
     "y" => ["00", ".0", "00"],
     "z" => ["0.", ".0", "00"],
-    " " => ["..", "..", ".."]
+    " " => ["..", "..", ".."],
+    "!" => ["..", "00", "0."],
+    "'" => ["..", "..", "0."],
+    "," => ["..", "0.", ".."],
+    "-" => ["..", "..", "00"],
+    "." => ["..", "00", ".0"],
+    "?" => ["..", "0.", "00"],
+    "`" => ["..", "..", ".0"], #shift for capitals
+    "#" => [".0", ".0", "00"]
   }
 
   BRAILLE_TO_ALPHABET = ALPHABET_TO_BRAILLE.invert
 
-
-
-  # def grab_last_chars
-  #   if @string.length < 40
-  #     return @string
-  #   else
-  #     number_of_chunks = (@string.length / 40).floor
-  #   #  leftover_chars = string.char % 40
-  #     chop_point = number_of_chunks * 40 + 1
-  #     chopped_chars = @string[chop_point..-1]
-  #     @string = @string - @string[chop_point..-1]
-  #     chopped_chars
-  #   end
-  # end
-  #
-  def chunk_from_alphabet
-    @string.delete "\n" "." "," "-" "\'"
-    @string.chars.each_slice(40).map(&:join)
-  end
-  #
-  # def chunk_from_braille
-  #   tr.chars.each_slice(160).map(&:join)
-  # end
-  #
-  # def convert_to_braille
-  #   chopped_chars = grab_last_chars
-  #   chunked_string = chunk_from_alphabet + chopped_chars
-  #   chunked_string.each do |line_of_output|  #this should give you each line_of_output that equates to a line of 80 characters
-  #     top = ""
-  #     middle = ""
-  #     bottom = ""
-  #     line_of_output.each_char do |char| #this should give you each character from each line
-  #       top << "#{ALPHABET_TO_BRAILLE[char][0]}"
-  #       middle << "#{ALPHABET_TO_BRAILLE[char][1]}"
-  #       bottom << "#{ALPHABET_TO_BRAILLE[char][2]}"
-  #     end
-  #     puts top
-  #     puts middle
-  #     puts bottom
-  #   end
-  # end
+  NUMBER_TO_BRAILLE = {
+    "#" => [".0", ".0", "00"],
+    "0" => [".0", "00", ".."],
+    "1" => ["0.", "..", ".."],
+    "2" => ["0.", "0.", ".."],
+    "3" => ["00", "..", ".."],
+    "4" => ["00", ".0", ".."],
+    "5" => ["0.", ".0", ".."],
+    "6" => ["00", "0.", ".."],
+    "7" => ["00", "00", ".."],
+    "8" => ["0.", "00", ".."],
+    "9" => [".0", "0.", ".."],
+    " " => ["..", "..", ".."]
+  }
 end
-FileReader.new.read
+
+module FileWriter
+  def write
+    filename_output = ARGV[1]
+    File.open(filename_output, "w")
+  end
+end
+
+class NightWriter
+  include Dictionary
+  include FileWriter
+  attr_reader :reader, :string, :top, :middle, :bottom
+
+  def initialize
+    @reader = FileReader.new
+    @top = ""
+    @middle = ""
+    @bottom = ""
+  end
+
+
+# create method to determine which table to execute on
+
+
+
+
+  #
+  # def chunk(string, number_of_characters)
+  #   string.delete "\n"
+  #   string.chars.each_slice(number_of_characters).map(&:join)
+  # end
+
+  def add_shift_for_capital_character(string)
+    shifted_text = string.gsub(/[A-Z]/) {|letter| "`" + letter.downcase}
+    shifted_text
+  end
+
+  def add_number_trigger(string)
+    new_string = string.split(" ")
+    string_with_number = []
+    new_string.each do |element|
+      if element[0] >= "0" && element[0] <= "9"
+        string_with_number << "#" + element
+      else
+        string_with_number << element
+      end
+    end
+    string_with_number.join(' ')
+  end
+
+  def convert_digit_to_braille(string)
+    string.each_char do |char|
+      @top << "#{NUMBER_TO_BRAILLE[char][0]}"
+      @middle << "#{NUMBER_TO_BRAILLE[char][1]}"
+      @bottom << "#{NUMBER_TO_BRAILLE[char][2]}"
+
+    end
+  end
+
+
+  def convert_non_digit_to_braille(string)
+    string.each_char do |char|
+      @top << "#{ALPHABET_TO_BRAILLE[char][0]}"
+      @middle << "#{ALPHABET_TO_BRAILLE[char][1]}"
+      @bottom << "#{ALPHABET_TO_BRAILLE[char][2]}"
+    end
+  end
+
+  def create_single_string(string)
+    new_string = ""
+    loop do
+      new_string += top[0..79] + "\n" + middle[0..79] + "\n" + bottom[0..79] + "\n"
+      @top = top[80..-1]
+      @middle = middle[80..-1]
+      @bottom = bottom[80..-1]
+      break if @top == nil
+    end
+    new_string
+  end
+
+  def determine_digit_or_non_to_covert(string)
+    string.delete "\n"
+    array_string = string.split(" ")
+    array_string.each do |word|
+      if word[0] == "#"
+        convert_digit_to_braille(word + " ")
+      else
+        convert_non_digit_to_braille(word + " ")
+      end
+    end
+  end
+end
+
+
+
+
+
+if __FILE__ == $0
+night = NightWriter.new
+text = night.reader.read
+shifted_text = night.add_shift_for_capital_character(text)
+numbered_and_shifted_text = night.add_number_trigger(shifted_text)
+braille_multi_variable_text = night.determine_digit_or_non_to_covert(numbered_and_shifted_text)
+
+converted_text = night.create_single_string(braille_multi_variable_text)
+binding.pry
+night.write.write(converted_text)
 puts ARGV
+end
