@@ -167,7 +167,6 @@ text = night.reader.read
 shifted_text = night.add_shift_for_capital_character(text)
 numbered_and_shifted_text = night.add_number_trigger(shifted_text)
 braille_multi_variable_text = night.determine_digit_or_non_to_covert(numbered_and_shifted_text)
-
 converted_text = night.create_single_string(braille_multi_variable_text)
 binding.pry
 night.write.write(converted_text)
